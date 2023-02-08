@@ -347,5 +347,77 @@ return noOfIsland;
       return false;
 
    }
+   class DistancePair{
+       int row;
+       int col;
+       int dis;
+
+       public DistancePair(int row, int col, int dis) {
+           this.row = row;
+           this.col = col;
+           this.dis = dis;
+       }
+
+
+   }
+
+   public void bfsDistance(int[][] adj, int[][] vis, int[][] distance){
+       Queue<DistancePair> queue = new LinkedList<>();
+
+       for (int i=0;i<adj.length;i++){
+           for (int j=0;j<adj[0].length;j++){
+               if (adj[i][j] == 0) {
+                   queue.add(new DistancePair(i, j, 0));
+                   vis[i][j] = 1;
+               }
+           }
+       }
+
+
+       int[] drow ={-1,0,1,0};
+       int[] dcol ={0,1,0,-1};
+
+       while (!queue.isEmpty()){
+           var node = queue.poll();
+           int row = node.row;
+           int col =node.col;
+           int dis = node.dis;
+
+          distance[row][col] = dis;
+
+           for (int i=0;i<4;i++){
+
+                  int r = row+drow[i];
+                  int c = col+dcol[i];
+
+             if (r>=0 && r<adj.length && c>=0 && c<adj[0].length && vis[r][c] == 0){
+
+                 queue.add(new DistancePair(r,c,dis+1));
+                 vis[r][c] =1;
+
+             }
+
+
+           }
+
+       }
+   }
+
+
+    public int[][] updateMatrix(int[][] mat) {
+
+       int[][] vis =  new int[mat.length][mat[0].length];
+       int[][] dis = new int[mat.length][mat[0].length];
+
+
+       bfsDistance(mat,vis,dis);
+
+       return dis;
+
+
+
+
+
+    }
 
 }

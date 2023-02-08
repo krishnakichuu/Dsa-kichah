@@ -3,8 +3,17 @@ import java.util.*;
 public class Main{
     public static void main(String[] args) {
 
-        List<List<Integer>> list = new ArrayList<>();
-        List<Integer> list1 = new ArrayList<>();
+
+
+        Graph g = new Graph();
+   int[][] arr = new int[][]{{0,0,0},
+                            {0,1,0},
+                            {1,1,1}};
+    var ans = g.updateMatrix(arr);
+
+    for (int i =0 ;i<ans.length;i++){
+        System.out.println(Arrays.toString(ans[i]));
+    }
 
     }
 
