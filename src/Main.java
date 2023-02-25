@@ -1,19 +1,93 @@
+import java.awt.geom.QuadCurve2D;
 import java.util.*;
 
 public class Main{
     public static void main(String[] args) {
+                                                             // in         out
+        System.out.println(changeAlpha("KriSHNaaa"));   // KRIshna ->  shnaKRI
+        int[] array = new int[]{1,2,3,4,5,6,7};
+        var ans2 = oddsum(array);
+        System.out.println(ans2);
+
+        }
+
+        public static int oddsum(int[] array){
+
+        int oddsum =0;
+        int evensum =0;
+
+        for (int i = 0;i<array.length;i++){
+            if (array[i] % 2 == 0)
+                evensum+=array[i];
+            else
+                oddsum+=array[i];
+        }
+         int ans= oddsum%evensum;
+
+        return ans;
+        }
+
+        public static String changeAlpha(String str){
+
+        String string = "";
+
+        for (int i =0;i<str.length();i++){
+            if (str.charAt(i) >= 97 && str.charAt(i) <= 122) {
+                string+=(char) (str.charAt(i) - 'a' + 'A');
+
+            }
+            else{
+               string += (char) (str.charAt(i) - 'A' + 'a');
+
+
+            }
+
+
+        }
+
+
+        return string;
+        }
+
+
+public static void patternyes(int n){
+
+        for (int  i = n;i>0;i--){
+            for (int j =i;j>0;j--){
+                System.out.print(j);
+            }
+            System.out.println();
+
+        }
+
+}
 
 
 
-        Graph g = new Graph();
-   int[][] arr = new int[][]{{0,0,0},
-                            {0,1,0},
-                            {1,1,1}};
-    var ans = g.updateMatrix(arr);
+    public static void patternsmak(int num){
+         for (int i = 0;i<num;i++){
 
-    for (int i =0 ;i<ans.length;i++){
-        System.out.println(Arrays.toString(ans[i]));
+             for (int j = 0;j<num;j++){
+                 if (i == 0 || j ==0 || i == num-1 || j == num-1){
+                     System.out.print("*");
+                 }else
+                     System.out.print(" ");
+             }
+             System.out.println();
+         }
+
+
     }
+    public static void pattern111(int num){
+        int center = num/2;
+        for(int i = 0;i<num;i++){
+            for (int j=0;j<num;j++){
+                if (i<=center && j ==0 || i == 0 && j>= center || (i==num-1 && j<=center ) || (j == num-1 && i>=center) ||j == center ||i == center ) System.out.print("* ");
+                else System.out.print("  ");
+            }
+            System.out.println();
+        }
+
 
     }
 

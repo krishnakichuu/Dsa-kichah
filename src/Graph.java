@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph {
 
@@ -18,6 +15,7 @@ public class Graph {
    }
 
     public void dfs(int node, int[] vis,ArrayList<ArrayList<Integer>> adj){
+
         vis[node] =1;
 
         for (var it : adj.get(node)){
@@ -419,5 +417,411 @@ return noOfIsland;
 
 
     }
+
+
+
+    public void  bfs(int[][] vis, char[][] board,int row,int col){
+       if ( row<0 || row>=vis.length || col < 0 || col>=vis[0].length || vis[row][col] == 1 || board[row][col] == 'O')
+           return;
+
+       vis[row][col] =1;
+       int[] r = {-1,0,1,0};
+       int[] c = {0,1,0,-1};
+       for (int i = 0;i<4;i++){
+           bfs(vis,board,row+r[i],col+c[i]);
+       }
+
+   }
+
+    public void solve(char[][] board) {
+       int[][] vis = new int[board.length][board[0].length];
+       for (int i = 0;i<board.length;i++){
+           for (int j =0;j<board[0].length;j++){
+               if (((i==0) || (j==0) || j == board[0].length-1 || i == board.length-1 ) && vis[i][j] == 0 && board[i][j] == 'O'){
+                   bfs(vis,board,i,j);
+               }
+           }
+       }
+       for (int i = 0;i<vis.length;i++){
+           for (int j =0;j<vis[0].length;j++){
+            if (vis[i][j] != 1)
+                board[i][j] = 'X';
+           }
+       }
+
+   }
+
+    public int numEnclaves(int[][] grid) {
+
+       int countLand = 0;
+
+       int[][] vis = new int[grid.length][grid[0].length];
+
+       for (int i =0;i<grid.length;i++){
+           for (int j =0;j<grid[0].length;j++){
+
+               if ((i == 0 || j ==0 || i == grid.length-1||j==grid[0].length-1) && vis[i][j] == 0 && grid[i][j] == 1){
+                   landDfs(grid,vis,i,j);
+               }
+
+           }
+
+       }
+       for (int i =0;i<grid.length;i++){
+           for (int j =0;j<grid[0].length-1;j++){
+               if (grid[i][j] == 1 && vis[i][j] == 0){
+                   countLand++;
+               }
+           }
+       }
+return countLand++;
+    }
+    public void landDfs(int[][] grip, int[][] vis, int row, int col){
+        if( ( row<0 || col < 0 ||row >= grip.length || col>=grip[0].length || row<0 || col < 0 ) || (vis[row][col] == 1) || grip[row][col] == 0)
+            return;
+
+        vis[row][col] = 1;
+
+        int[] r = {-1,0,1,0};
+        int[] c = {0,1,0,-1};
+
+        for (int i = 0;i<4;i++){
+            landDfs(grip,vis,row+r[i],col+c[i]);
+        }
+   }
+
+   public int countDistinctIslands(int[][] grid) {
+
+       Set<List<List<Integer>>> set = new HashSet<>();
+       int[][] vis  = new int[grid.length][grid[0].length];
+       for (int i =0;i<grid.length;i++){
+           for (int j =0;j<grid[0].length;j++){
+               List<List<Integer>> temp =new ArrayList<>();
+               if(grid[i][j] == 1 && vis[i][j] ==0){
+
+                 countDistinctIslandsDfs(grid,vis,i,j,i,j,temp);
+                 set.add(temp);
+
+               }
+
+           }
+       }
+
+        return set.size();
+    }
+
+    public void countDistinctIslandsDfs(int[][] grid,int[][] vis,int baseR, int baseC,int row, int col , List<List<Integer>> set){
+
+       if (( row<0 || col < 0|| row >= grid.length|| col>=grid[0].length) || vis[row][col] == 1 || grid[row][col] == 0 )
+           return;
+
+       vis[row][col] = 1;
+       List<Integer> interlist = new ArrayList<>();
+       interlist.add(baseR-row);
+       interlist.add(baseC-col);
+       set.add(interlist);
+
+
+        int[] r = {-1,0,1,0};
+        int[] c = {0,1,0,-1};
+
+        for (int i = 0;i<4;i++){
+            countDistinctIslandsDfs(grid,vis,baseR,baseC,row+r[i],col+c[i],set);
+
+
+        }
+
+
+    }
+
+    public boolean isBipartite(int[][] graph) {
+
+       int[] vis = new int[graph.length];
+       for (int i =0;i<graph.length;i++){
+           vis[i]=-1;
+       }
+       for (int i =0;i<graph.length;i++) {
+           if (vis[i] == -1)
+           if(isBipartiteDfs(graph, vis, i, 0)==false) return false;
+       }
+
+      return true;
+
+
+    }
+
+    public boolean isBipartiteDfs(int[][] graph, int[] vis,int node, int color){
+
+
+       vis[node] = color;
+
+      for(var it : graph[node]){
+         if (vis[it] == -1){
+             if (isBipartiteDfs(graph,vis,it,1-color) == false) return false;
+         }
+         else if (vis[it] == color)
+             return false;
+      }
+
+      return true;
+    }
+
+    public boolean circleInDirector(int[][] graph){
+      int[] vis = new int[graph.length];
+      int[] pathVis = new int[graph.length];
+
+      for (int i=0;i<graph.length;i++){
+          if (vis[i] == 0){
+              if (circleInDirectorDfs(graph,vis,pathVis,i)==true) return true;
+          }
+      }
+       return false;
+
+    }
+    public boolean circleInDirectorDfs(int[][] graph,int[] vis, int[] pathVis,int node){
+
+       vis[node] = 1;
+       pathVis[node] = 1;
+
+
+
+       for (int it : graph[node]){
+           if (vis[it] == 0){
+               if (circleInDirectorDfs(graph,vis,pathVis,it) == true)
+                   return true;
+
+           } else if(pathVis[it] == 1){
+               return true;
+           }
+       }
+
+       pathVis[node] =0;
+       return false;
+   }
+
+ public List<Integer> topologicalSort(ArrayList<ArrayList<Integer>> adj){
+
+       int[] vis = new int[adj.size()];
+       Stack<Integer> stack =new Stack<>();
+
+       for (int i = 0;i<adj.size();i++){
+           if (vis[i] == 0){
+               topologicalSortDfs(adj,vis,stack,i);
+           }
+
+       }
+
+       List<Integer> sortList = new ArrayList<>();
+       while (!stack.isEmpty()){
+           sortList.add(stack.pop());
+       }
+  return sortList;
+
+ }
+ public void topologicalSortDfs(ArrayList<ArrayList<Integer>> adj,int[] vis, Stack<Integer> stack,int node){
+
+       vis[node] = 1;
+
+       for (var it : adj.get(node)){
+           if (vis[it] == 0){
+               topologicalSortDfs(adj,vis,stack,it);
+           }
+       }
+
+       stack.add(node);
+
+ }
+ public List<Integer> topologicalSortB(ArrayList<ArrayList<Integer>> adj){
+
+       int[] degree = new int[adj.size()];
+       Queue<Integer> queue =new LinkedList<>();
+       List<Integer> ans =  new ArrayList<>();
+
+          for (int i =0;i<adj.size();i++){
+              for (var it : adj.get(i)){
+                  degree[it]++;
+              }
+          }
+    for (int i = 0;i<degree.length;i++){
+        if (degree[i] == 0){
+            queue.add(i);
+        }
+    }
+
+    while (!queue.isEmpty()){
+        var node = queue.poll();
+        ans.add(node);
+        for(int it : adj.get(node)){
+            degree[it]--;
+            if (degree[it] == 0){
+                queue.add(it);
+            }
+        }
+
+    }
+
+return ans;
+
+ }
+
+    public List<Integer> eventualSafeNodes(int[][] graph){
+
+       List<Integer> ans  = new ArrayList<>();
+
+       List<List<Integer>> newAdj = new ArrayList<>();
+
+       for (int i =0;i<graph.length;i++){
+           newAdj.add(new ArrayList<>());
+       }
+
+       for (int i = 0 ;i<graph.length;i++){
+           for (var it : graph[i]){
+              newAdj.get(it).add(i);
+           }
+       }
+
+       int[] inDegree = new int[graph.length];
+
+       for (int i =0;i<newAdj.size();i++){
+           for (var it : newAdj.get(i)){
+               inDegree[it]++;
+           }
+       }
+
+       Queue<Integer> queue =new LinkedList<>();
+       for (int i = 0;i<inDegree.length;i++){
+
+           if (inDegree[i] == 0){
+               queue.add(i);
+           }
+
+
+       }
+
+       while (!queue.isEmpty()){
+
+           var node = queue.poll();
+           ans.add(node);
+
+           for (var subnode : newAdj.get(node)){
+               inDegree[subnode]--;
+               if (inDegree[subnode] == 0){
+                   queue.add(subnode);
+               }
+           }
+       }
+
+       Collections.sort(ans);
+
+       return ans;
+
+
+
+
+    }
+
+    public class GraphPair{
+
+       int node;
+       int dis;
+
+
+        public GraphPair(int node, int dis) {
+            this.node = node;
+            this.dis = dis;
+        }
+    }
+
+    public int[] shortestPath(int[][] edges,int n,int m ,int src) {
+        Queue<GraphPair> queue =new LinkedList<>();
+       ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+       for (int i =0;i<n;i++){
+           adj.add(new ArrayList<>());
+       }
+
+       for(int i =0 ;i<m;i++){
+          adj.get(edges[i][0]).add(edges[i][1]);
+          adj.get(edges[i][1]).add(edges[i][0]);
+       }
+
+       int[] dis = new int[n];
+       for (int i =0;i<dis.length;i++){
+           dis[i] = -1;
+       }
+
+       queue.add(new GraphPair(src,0));
+
+       while (!queue.isEmpty()){
+           var pair = queue.poll();
+           int node = pair.node;
+           int distance = pair.dis;
+           dis[node] = distance;
+
+           for (var it : adj.get(node)){
+               if (dis[it] == -1){
+                   queue.add(new GraphPair(it,distance+1));
+               }
+           }
+
+
+       }
+
+
+
+     return dis;
+
+
+    }
+
+    class GraphPairHeight{
+
+        public GraphPairHeight(int node, int height) {
+            this.node = node;
+            this.height = height;
+        }
+
+        int node;
+       int height;
+
+    }
+    public int[] shortestPath(int N,int M, int[][] edges) {
+
+       ArrayList<ArrayList<GraphPairHeight>> graph =new ArrayList<>();
+
+       for (int i =0;i<N;i++){
+           graph.add(new ArrayList<>());
+       }
+
+       for (int i = 0 ;i<M;i++){
+           graph.get(edges[i][0]).add(new GraphPairHeight(edges[i][1],edges[i][2]));
+       }
+
+     return new int[9];
+    }
+
+    public Stack<Integer> toposort( ArrayList<ArrayList<GraphPairHeight>> graph){
+
+       Stack<Integer> stack = new Stack<>();
+       int[] vis = new int[graph.size()];
+
+       for (int i = 0;i<graph.size();i++){
+           if (vis[i] == 0){
+               toposortdfs(i,graph,stack,vis);
+           }
+       }
+       return stack;
+    }
+    public void toposortdfs(int node,ArrayList<ArrayList<GraphPairHeight>> graph, Stack<Integer> stack,int[] vis){
+
+       vis[node] = 1;
+
+       for (var it : graph.get(node)){
+          if (vis[it.node] == 0)
+              toposortdfs(it.node,graph,stack,vis);
+       }
+
+        stack.add(node);
+   }
+
 
 }
