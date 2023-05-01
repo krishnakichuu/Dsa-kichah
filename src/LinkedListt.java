@@ -1,18 +1,16 @@
 import org.w3c.dom.ls.LSInput;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class LinkedListt {
-    public class ListNode {
+    public static class ListNode {
 
         public ListNode(int valu) {
             this.val = valu;
         }
 
-        private int val;
-        private ListNode next;
+         int val;
+         ListNode next;
 
     }
 
@@ -39,6 +37,81 @@ public class LinkedListt {
          node.next = head;
          head = node;
         }
+    }
+
+    public ListNode deleteDuplicates(ListNode head) {
+
+        var cur = head;
+        Map<Integer,Integer> map = new TreeMap<>();
+
+        while (cur != null){
+
+            if (map.containsKey(cur.val)){
+                map.put(cur.val,map.get(cur.val)+1);
+
+            }else {
+                map.put(cur.val,1);
+            }
+
+            cur = cur.next;
+        }
+
+        ListNode ansList = new ListNode(0);
+        var cur2 = ansList;
+
+        for (var items : map.entrySet()){
+
+            if (items.getValue() == 1){
+                cur2.next = new ListNode(items.getKey());
+                cur2 = cur2.next;
+            }
+
+        }
+
+     return ansList.next;
+
+
+    }
+
+
+    public ListNode swapNodes(ListNode head, int k) {
+
+        int count = 0;
+
+        var cur = head;
+
+        while (cur != null){
+
+            count++;
+            cur = cur.next;
+
+        }
+
+        ListNode node1 = new ListNode(0);
+        ListNode node2 = new ListNode(0);
+
+        int node1time = k;
+        int node2time = count - k;
+
+        cur = head;
+        count = 1;
+        while (cur!=null){
+
+            if (count == k){
+                node1 = cur;
+            }if (count == node2time){
+                node2 = cur;
+            }
+
+        }
+
+        int temp = node1.val;
+        node1.val = node2.val;
+        node2.val = temp;
+
+
+        return head;
+
     }
 
     public int findindex(int item){

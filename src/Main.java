@@ -1,17 +1,558 @@
 import java.awt.geom.QuadCurve2D;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main{
     public static void main(String[] args) {
-                                                             // in         out
-        System.out.println(changeAlpha("KriSHNaaa"));   // KRIshna ->  shnaKRI
-        int[] array = new int[]{1,2,3,4,5,6,7};
-        var ans2 = oddsum(array);
-        System.out.println(ans2);
+
+
+        System.out.println(hcf(24,10));
+
+
+
+    }
+      /*      1
+              1 0
+              1 0 1
+              1 0 1 0
+              1 0 1 0 1     */
+
+    public static int hcf(int num1,int num2){
+
+        int time =( num1>num2 )? num1 : num2;
+
+       int max = Integer.MIN_VALUE;
+
+        for(int i = 1;i<=time;i++){
+        if (num1 % i == 0 && num2 % i ==0){
+            if (max < i){
+                max = i;
+            }
+
+           max = Math.max(max,i);
+        }
+
 
         }
 
-        public static int oddsum(int[] array){
+
+      return max;
+    }
+
+
+    public static void p9(int n){
+
+        for (int i =1;i<=n;i++){
+            for (int j = 1;j<=n;j++){
+                if (i == j){
+                    System.out.print(j);
+                }
+                else {
+                    System.out.print(0);
+                }
+            }
+            System.out.println();
+        }
+
+
+    }
+
+
+    public static void p8(int n){
+
+        for (int i = 1;i<=n;i++){
+
+            for (int j = 1;j<=i;j++){
+                System.out.print(j%2);
+            }
+            System.out.println();
+        }
+    }
+
+
+    public static void p7(int n){
+
+        for (int i =1;i<=n;i++){
+
+            int temp = n-i;
+
+            for (int j = 1;j<=temp;j++) {
+                System.out.print(" ");
+            }
+                for (int k = 1;k<=i;k++){
+                    System.out.print(k);
+                }
+
+                    for (int k = 1;k<=i-1;k++){
+                        System.out.print(k);
+                    }
+
+
+            System.out.println();
+
+        }
+
+    }
+
+    public static void p6(int n){
+
+
+        for (int i = 1;i<=n;i++){
+            var temp = n-i;
+            for (int j =1;j<=n;j++){
+                if (j<=temp){
+                    System.out.print(" ");
+                }else {
+                    System.out.print(j+" ");
+                }
+            }
+            System.out.println();
+        }
+
+    }
+
+
+    public static void p5(int n){
+
+        for (int i =1;i<=n*2;i++) {
+
+            if (i<=n){
+            for (int k = 1; k < i; k++) {
+                System.out.print(" ");
+            }
+
+            for (int j = i; j <= n; j++) {
+                System.out.print(j);
+            }
+        }
+
+
+            else {
+                for (int k = 1;k<=n;k++){
+
+                    var t = n - (i%n);
+
+                    if (n*2 == i){
+                        t =0;
+                    }
+
+                    if (k <= t){
+                        System.out.print(" ");
+                    }else{
+                        System.out.print(k);
+                    }
+
+                }
+            }
+
+            System.out.println();
+        }
+
+
+    }
+
+    public static void p4(int n){
+        for (int i =1;i<n*2;i++){
+         if (i<=5){
+             for (int j = 1;j<=n-i;j++){
+                 System.out.print(" ");
+             }
+             for (int k = 1;k<=i;k++){
+                 System.out.print(k+"");
+             }
+         }
+         else {
+             for (int j = 1;j<=i%n;j++){
+                 System.out.print(" ");
+             }
+
+             for (int k = 1;k<=n-i%n;k++){
+                 System.out.print(k+"");
+             }
+         }
+
+            System.out.println();
+
+        }
+
+
+    }
+
+    public static  void p3(int n){
+
+        for (int i =1;i<=n;i++){
+
+            for (int k = 1;k<i;k++){
+                System.out.print(" ");
+            }
+            for (int j = 1;j<=n-i+1;j++){
+                System.out.print(j+" ");
+            }
+            System.out.println();
+        }
+
+
+    }
+   public static void p2(int n){
+
+       for(int i =1;i<=n;i++){
+           int temp = 1;
+           for (int j = 1;j<=i;j++){
+               System.out.print(temp++);
+           }
+           temp--;
+           for (int k =1;k<i;k++){
+               System.out.print(--temp);
+           }
+
+           System.out.println();
+       }
+
+
+   }
+
+    public static void p1(int n){
+        for (int i =1;i<=n;i++){
+            int temp = 0;
+            for (int j =1;j<=n;j++){
+                if ((n-i+1) == j || j==n){
+                    System.out.print(1 + " ");
+
+                }else if ( i>2 && ( (n-i+1+1) == j || j == n-1 ) ){
+                    System.out.print(i-1+" ");
+                    temp = i-1;
+
+                }
+                else if ( ( i%2 == 0 ) &&  (n-i+1) <= j ){
+
+                    int mul = i/2 -1;
+
+                    System.out.print("* ");
+                }
+
+                else
+                    System.out.print(" ");
+            }
+
+            System.out.println();
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public static List<Integer> valid(List<Integer> input){
+        List<Integer> ans = new ArrayList<>();
+        int[] array = new int[31];
+
+        for (var it : input){
+                array[it]++;
+        }
+
+        for (int i = 20;i<array.length;i++){
+            if (array[i] == 0 || array[i] > 1){
+                ans.add(i);
+            }
+        }
+        return ans;
+
+    }
+
+
+    public static List<String> getVist(int input){
+
+        List<String> output = new ArrayList<>();
+
+        for(int i = 1;i<=input;i++){
+          if (i % 2 != 0 && i%5 != 0){
+              output.add("\"Visitor "+i +"\"");
+          }
+          else if(i%2 == 0 && i % 5 ==0) {
+
+              output.add("\"Visitor "+i+" God save the king & queen"+"\"");
+          }
+          else if (i%2 == 0){
+              output.add("\"Visitor "+i+" God save the king"+"\"");
+
+          }
+          else{
+              output.add("\"Visitor "+i+" God save the queen"+"\"");
+          }
+        }
+        return output;
+
+    }
+
+    public static int stair(int input){
+
+        if (input == 0)
+            return 0;
+
+        if (input == 1)
+            return 1;
+
+        if (input % 3 == 0)
+            return 1;
+
+        if ((input-1) % 3 == 0)
+            return 1;
+
+            return 0;
+
+    }
+
+    class Pairof{
+
+
+        public Pairof(int node, int des) {
+            this.node = node;
+            this.des = des;
+        }
+
+        int node;
+        int des;
+
+
+    }
+
+    public String graph(int input){
+        List<List<Pairof>> list = new ArrayList<>();
+
+        for (int i =0;i<5;i++){
+            list.add(new ArrayList<>());
+        }
+
+        list.get(0).add(new Pairof(1,2));
+        list.get(0).add(new Pairof(2,1));
+        list.get(1).add(new Pairof(1,1));
+        list.get(1).add(new Pairof(4,4));
+        list.get(2).add(new Pairof(4,7));
+        list.get(2).add(new Pairof(3,6));
+        list.get(3).add(new Pairof(2,3));
+        list.get(4).add(new Pairof(4,3));
+
+
+
+
+      return "dwlkdfw";
+
+    }
+
+    public static String vaild(String Input1){
+
+
+        String z = "(\\d{1,2}|(0|1)\\"+"d{2}|2[0-4]\\d|25[0-5])";
+        String regex = z+"\\." + z+"\\." + z+"\\." + z;
+
+
+        Pattern p = Pattern.compile(regex);
+
+        Matcher m = p.matcher(Input1);
+
+        if (m.matches()){
+            return "VALID";
+        }else
+            return "INVALID";
+
+
+
+
+    }
+
+    public static List<String> generate(List<String> Input1){
+
+        List<String> ans = new ArrayList<>();
+
+        for(int i = 0;i<Input1.size();i++){
+            String str = Input1.get(i);
+           for(int j = i+1;j<Input1.size();j++){
+              if (validation(str,Input1.get(j))){
+                  ans.add(str +"-"+ Input1.get(j));
+              }
+           }
+        }
+
+        return ans;
+
+    }
+
+    public static boolean validation(String str1,String str2){
+        int check = 0;
+        String whichSmall;
+        String whichBig;
+
+        if(str1.length()>str2.length()){
+          whichBig = str1;
+          whichSmall = str2;
+        }else {
+            whichBig = str2;
+            whichSmall = str1;
+        }
+
+        for (int i=0;i<whichBig.length();i++){
+            for (int j= 0;j<whichSmall.length();j++){
+                if (whichBig.charAt(i) == whichSmall.charAt(j)){
+                    check++;
+                }
+            }
+        }
+        if (check == 0){
+            return true;
+        }
+        else
+           return false;
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static boolean checkPara(String str){
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i =0;i<str.length();i++) {
+            if (str.charAt(i) == '(') {
+                stack.add(str.charAt(i));
+            } else if (str.charAt(i) == ')'){
+                if (stack.isEmpty()){
+                    return false;
+                } else {
+                    stack.pop();
+                }
+            }
+        }
+            if (stack.isEmpty()){
+                return true;
+            }else
+                return false;
+
+    }
+
+    public static int[] alternativesorithing(int[] array){
+        int[] array1;
+        int[] array2;
+
+        if (array.length%2==0){
+         array1 = new int[array.length/2];
+         array2 = new int[array.length/2];
+        } else {
+            array1 = new int[array.length/2];
+            array2 = new int[(array.length/2)+1];
+        }
+
+        for(int i = 0;i<array1.length;i++){
+           array1[i] = array[i];
+        }
+        int j = array.length-1;
+
+      for (int i = 0;i<array2.length;i++){
+          array2[i] = array[j--];
+      }
+
+      int[] newarray = new int[array.length];
+      int i =0;
+      int m = 0;
+      int l =0;
+
+      int n = (array1.length>array2.length) ? array2.length : array1.length;
+
+      while (l<n && m<n){
+          newarray[i++] = array2[m++];
+          newarray[i++] = array1[l++];
+      }
+
+      if(array2.length>array1.length){
+          newarray[i] = array2[array2.length-1];
+      }else if (array1.length>array2.length){
+          newarray[i] = array1[array1.length-1];
+      }
+
+      return newarray;
+
+    }
+
+    public static void numberpattern(int n){
+
+        for (int i = 1;i<=n;i++){
+            int pre = i;
+            for (int j = 1;j<=i;j++){
+
+               if (j==1){
+
+                   System.out.print(i+" ");
+                   pre = i;
+               }
+               else if (j%2 == 0){
+                   int now =  pre + ((n-i) + (n-i) + 1);
+                   System.out.print(now+" ");
+                   pre = now;
+               }else {
+
+                   int nowhere = pre +(i-(j-1)) +(i-j) + 1;
+                   System.out.print(nowhere+" ");
+                   pre = nowhere;
+
+               }
+
+            }
+            System.out.println();
+        }
+
+
+
+
+
+
+    }
+     public static  void arrays(int[] array) {
+
+        int[] minarray = new int[array.length];
+
+        for (int i =0;i<array.length;i++){
+
+            minarray[i] = -1 *array[i];
+        }
+
+        Arrays.sort(minarray);
+        for (int i = 0;i<array.length ;i++){
+            array[i] = -1 * minarray[i];
+        }
+
+
+
+     }        public static int oddsum(int[] array){
 
         int oddsum =0;
         int evensum =0;
@@ -32,7 +573,8 @@ public class Main{
         String string = "";
 
         for (int i =0;i<str.length();i++){
-            if (str.charAt(i) >= 97 && str.charAt(i) <= 122) {
+
+            if (str.charAt(i) >= 'a' && str.charAt(i) <= 'z') {
                 string+=(char) (str.charAt(i) - 'a' + 'A');
 
             }
@@ -41,11 +583,7 @@ public class Main{
 
 
             }
-
-
         }
-
-
         return string;
         }
 
@@ -82,7 +620,12 @@ public static void patternyes(int n){
         int center = num/2;
         for(int i = 0;i<num;i++){
             for (int j=0;j<num;j++){
-                if (i<=center && j ==0 || i == 0 && j>= center || (i==num-1 && j<=center ) || (j == num-1 && i>=center) ||j == center ||i == center ) System.out.print("* ");
+                if (i<=center && j ==0 ||
+                        i == 0 && j>= center ||
+                        (i==num-1 && j<=center ) ||
+                        (j == num-1 && i>=center) ||
+                        j == center ||i == center )
+                    System.out.print("* ");
                 else System.out.print("  ");
             }
             System.out.println();

@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.TransferQueue;
 
 public class Tree {
 
@@ -24,7 +23,91 @@ public class Tree {
           this.left = left;
           this.right = right;
       }
-  }
+
+
+    }
+
+
+    public int minDepth(TreeNode root){
+
+
+       if (root == null)
+           return 0;
+
+       if (root.right == null && root.left == null)
+           return 1;
+
+
+      return minDepthHelper(root);
+
+    }
+
+    public int minDepthHelper(TreeNode root){
+
+        if (root == null)
+            return 0;
+
+        int left = minDepth(root.left);
+
+        int right = minDepth(root.right);
+
+        int take = 0;
+
+        if (left == 0){
+            take = right;
+        }else if (right == 0){
+            take = left;
+        }else if(left <= right){
+            take = left;
+        } else{
+            take = right;
+        }
+        return 1+take;
+
+
+    }
+
+
+    public void tree(TreeNode tree){
+
+        if (tree == null)
+            return;
+
+        tree(tree.left);
+        System.out.println(tree.val);
+        tree(tree.right);
+
+
+    }
+
+    public TreeNode sortedArrayToBST(int[] nums){
+
+        return maketree(nums,0,nums.length-1);
+
+    }
+    public TreeNode maketree(int[] nums,int start, int end ){
+
+       if (start > end)
+           return null;
+
+       if (start == end)
+           return new TreeNode(nums[start]);
+
+        int m = (start+end) / 2 ;
+        var node = new TreeNode(nums[m]);
+
+        node.left = maketree(nums,start,m-1);
+        node.right = maketree(nums,m+1,end);
+
+        return node;
+
+
+    }
+
+
+
+
+
   public List<Integer> inorderTraversal(TreeNode root) {
 
       List<Integer> list =  new ArrayList<>();
@@ -921,9 +1004,230 @@ return width;
 
     }
 
+    public int sumNumbers(TreeNode root){
+
+      int[] mainsum = new int[]{0};
+      int[] array = new int[]{0};
+
+      helperSum(array,mainsum,root);
+
+      return mainsum[0];
+
+
+    }
+
+    public void helperSum(int[] arraysum , int[] mainsum, TreeNode node ){
+
+        if (node == null){
+            return;
+        }
+
+        arraysum[0] = arraysum[0] * 10;
+        arraysum[0] += node.val;
+
+        helperSum(arraysum,mainsum,node.left);
+        helperSum(arraysum,mainsum,node.right);
+
+
+       if (node.right == null && node.left ==null)
+        mainsum[0] += arraysum[0];
+
+
+        arraysum[0]-= node.val;
+        arraysum[0]/=10;
 
 
 
+    }
+
+
+    public boolean isCompleteTree(TreeNode root) {
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+
+            TreeNode node = queue.peek();
+
+            if (node == null)
+                break;
+
+                node = queue.poll();
+
+            if (node != null) {
+                queue.add(node.left);
+                queue.add(node.right);
+            }
+
+        }
+        while (!queue.isEmpty()){
+
+            var node = queue.poll();
+            if (node != null)
+                return false;
+        }
+
+      return true;
+    }
+
+
+    class PairCount{
+
+        public PairCount(int des, int node) {
+            this.des = des;
+            this.node = node;
+        }
+
+        int des;
+        int node;
+
+
+
+
+    }
+
+    class Pair{
+        public Pair(int node, int des) {
+            this.node = node;
+            this.des = des;
+        }
+
+        int node;
+        int des;
+
+    }
+
+    public int countPaths(int n, int[][] roads) {
+
+
+        List<List<Pair>> adjlist = new ArrayList<>();
+
+        for (int i=0;i<n;i++){
+            adjlist.add(new ArrayList<>());
+        }
+        for (int i = 0;i<roads.length;i++){
+            adjlist.get(roads[i][0]).add(new Pair(roads[i][1],roads[i][2]));
+            adjlist.get(roads[i][1]).add(new Pair(roads[i][0],roads[i][2]));
+        }
+
+
+       int[] ways = new int[n];
+       int[] des = new int[n];
+
+       ways[0] = 1;
+
+       for (int i = 0;i<n;i++){
+           des[i] = (int)1e9;
+       }
+
+       des[0] = 0;
+
+
+       PriorityQueue<List<Integer>> queue = new PriorityQueue<>((x,y)->x.get(0)-y.get(0)) ;
+       List<Integer> list = Arrays.asList(0,0);
+       queue.add(list);
+       int mod = (int)(1e9+7);
+
+       while(!queue.isEmpty()){
+           var N = queue.poll();
+
+           for (var it : adjlist.get(N.get(1))){
+
+               if (N.get(0)+it.des < des[it.node]){
+                   des[it.node] =N.get(0)+it.des;
+                   queue.add(Arrays.asList( N.get(0)+it.des,it.node));
+                   ways[it.node]+=ways[N.get(1)];
+               }else if(N.get(0)+it.des == des[it.node]){
+                   ways[it.node]= (ways[it.node]+ ways[N.get(1)])%mod;
+               }
+
+
+           }
+
+       }
+       return ways[n-1] % mod ;
+    }
+
+    public int longestZigZag1(TreeNode root) {
+
+        int max = Integer.MIN_VALUE;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.add(root);
+
+        while(!queue.isEmpty()){
+            var node = queue.poll();
+
+            if (node.left!=null){
+                queue.add(node.left);
+            }
+            if (node.right!=null){
+                queue.add(node.right);
+            }
+
+            int check = helper2(node);
+            max = Math.max(max,check);
+
+        }
+
+      return max;
+
+    }
+
+
+    public int helper2(TreeNode node){
+
+
+        return Math.max(helperlongestZigZag1(node.left,'l'), helperlongestZigZag1(node.right,'r'));
+    }
+
+    public int helperlongestZigZag1(TreeNode node, char from){
+
+        if (node == null)
+            return 0;
+
+        int right = 0;
+        int left = 0;
+
+        if (from == 'l'){
+
+            right = helperlongestZigZag1(node.right,'r');
+
+        }
+        else if (from == 'r'){
+            left = helperlongestZigZag1(node.left,'l');
+        }
+
+        return 1 + Math.max(right,left);
+
+
+    }
+
+  int max = Integer.MIN_VALUE;
+
+   public int longestZigZag(TreeNode root){
+
+       helperlongestZigZag(root.left,'l',0);
+       helperlongestZigZag(root.right,'l',0);
+       return max;
+
+
+   }
+
+   public void helperlongestZigZag(TreeNode node,char from,int current){
+
+     if (node == null){
+         return;
+     }
+     max = Math.max(current,max);
+
+     helperlongestZigZag(node.left,'l',(from =='l') ? 1 : current+1);
+     helperlongestZigZag(node.right,'r',(from =='r') ? 1 : current+1);
+
+   }
 
 }
 
